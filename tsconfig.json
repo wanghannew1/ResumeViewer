@@ -1,4 +1,9 @@
 {
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types", "./types"],
+    "types": ["element-plus/global"]
+  },
   "files": [],
   "references": [
     {

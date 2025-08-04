@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import JsonNode from '../components/JsonNode.vue'
+import Resume from '../components/Resume.vue'
 import {reactive} from 'vue'
-import {type Persons} from '@/types'
+import {type Persons, type IResume} from '@/types'
   
 let persons = reactive<Persons>([
   {_id:'e98219e12',seq_num:1,name:'张三',file_name:'f1', age:19},
@@ -9,11 +10,16 @@ let persons = reactive<Persons>([
   {_id:'e98219e14',seq_num:3,name:'王五',file_name:'f3'}
 ])
 
+let resume = reactive<IResume>(
+  {_id:'e98219e12',seq_num:1,name:'张三',file_name:'f1', age:19}
+)
+
 
 </script>
 
 <template>
   <main>
-    <JsonNode :personList="persons"/>
+    <!-- <JsonNode :resume="resume"/> -->
+    <resume></resume>
   </main>
 </template>

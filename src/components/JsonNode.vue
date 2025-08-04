@@ -1,48 +1,24 @@
 <template>
-  <div class="person">
+  <!-- <div class="person">
     <ul>
       <li v-for="item in pList" :key="item._id">
         {{item.name}}--{{item.age}}
       </li>
     </ul>
-  </div>
+  </div> -->
 
-    <div class="json-viewer">
-      <!-- 根节点开始 -->
-      <div v-if="isRoot" class="json-root">
-        <h2 v-if="title">{{ title }}</h2>
-        <json-node :value="jsonData" :key="rootKey" :depth="0" />
-      </div>
-      
-      <!-- 递归组件定义 -->
-      <template v-else>
-        <!-- 对象类型 -->
-        <div v-if="isObject" class="json-object" :style="indentStyle">
-          <span class="json-brace">{</span>
-          <!-- <div v-for="(value, key) in value" :key="key" class="json-property">
-            <span class="json-key">"{{ key }}": </span>
-            <json-node :value="value" :depth="depth + 1" />
-            <span class="json-comma">,</span>
-          </div> -->
-          <span class="json-brace">}</span>
-        </div>
-        
-        <!-- 数组类型 -->
-        <!-- <div v-else-if="isArray" class="json-array" :style="indentStyle">
-          <span class="json-bracket">[</span>
-          <div v-for="(item, index) in value" :key="index" class="json-item">
-            <json-node :value="item" :depth="depth + 1" />
-            <span class="json-comma">,</span>
-          </div>
-          <span class="json-bracket">]</span>
-        </div> -->
-        
-        <!-- 基本类型 -->
-        <!-- <span v-else class="json-value" :class="valueType" :style="indentStyle">
-          {{ formattedValue }}
-        </span> -->
-      </template>
-    </div>
+  <el-descriptions title="简历信息" :column="2" border >
+    <el-descriptions-item 
+      v-for="(value, key) in rs" 
+      :key="key" 
+      :label="key"
+    >
+      {{ value }}
+    </el-descriptions-item>
+  </el-descriptions>
+
+
+ 
 </template>
 
 
@@ -53,15 +29,21 @@
 </script>
 
 <script lang="ts" setup>
-  import { type PersonInter, type Persons } from '@/types'
+  import { type PersonInter, type IResume, type Persons } from '@/types'
   import { defineProps } from 'vue'
 
-  const porps = defineProps<{personList?: Persons}>()
-  const pList = porps.personList
+  const porps = defineProps<{resume?: IResume}>()
+  const rs = porps.resume
+  // const pList = porps.personList
   let isRoot = false
   let title = '标题'
   let rootKey = 'root'
-  let jsonData:any = []
+  let flatJson:any = {
+        "姓名": "张三",
+        "年龄": 30,
+        email: "zhangsan@example.com",
+        city: "北京"
+      }
   let isObject = false
   let indentStyle = ''
   let value

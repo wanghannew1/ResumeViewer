@@ -1,4 +1,5 @@
 // 定义一个接口，限制每个Person对象的格式
+// 废弃
 export interface PersonInter {
     _id:string,
     seq_num:number,
@@ -8,4 +9,57 @@ export interface PersonInter {
 }
   
 // 定义一个自定义类型Persons
+// 废弃
 export type Persons = Array<PersonInter>
+
+// 任意属性的json
+// 废弃
+export interface IResume {
+    [key: string]: any // 允许任意额外的动态属性
+}
+
+// 2. 定义 API 错误结构
+export interface ApiError {
+  message: string;
+  status?: number;
+  code?: string;
+}
+
+// api返回值类型
+export interface ApiResponse<T = any> {
+  code: number;
+  message: string;
+  data: T;
+}
+
+// 简历类型
+export interface Resume {
+  _id: string;
+  name?: string;
+  phone?: string;
+  email?: string;
+  birthday?: string;
+  highest_degree?: string;
+  major?: string;
+  is_resume?: boolean;
+  file_name?: string;
+  ethnicity?: string;
+  seq_num?: number;
+  address?: string | null;
+  gender?: string | null;
+  // 其他可能为null的字段...
+  education_background?: string[];
+  work_experience?: string[] | null;
+  skills?: string[];
+  project_experience?: string[];
+  awards?: string[];
+}
+
+// 翻页参数对象
+export interface Pagination {
+  current_page: number,
+  size: number,
+  total: number,
+  total_pages: number
+}
+
