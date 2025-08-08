@@ -30,6 +30,7 @@ declare module 'vue' {
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
     JsonNode: typeof import('./src/components/JsonNode.vue')['default']
     Resume: typeof import('./src/components/Resume.vue')['default']
+    ResumeDialog: typeof import('./src/components/ResumeDialog.vue')['default']
     ResumeList: typeof import('./src/components/ResumeList.vue')['default']
     ResumeViewer: typeof import('./src/components/ResumeViewer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
