@@ -49,6 +49,7 @@
       layout="sizes, total, prev, pager, next"
     />
   </div>
+  <ResumeDialog v-model="visible" :resume="currentResume"></ResumeDialog>
 </template>
 
 
@@ -59,21 +60,43 @@
 </script> -->
 
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 // 在组件中使用
 import { fetchData, postData } from '@/api';
-import type { Pagination } from '@/types'
+import type { Pagination, Resume } from '@/types'
 
 const resumeList: any[] = reactive([]) // 必须设置数组的类型，否则resumeList被 TypeScript 推断为 never[] 类型（表示"不允许任何元素"的数组）
+const currentResume: Resume = reactive({
+  _id: "1",
+  name: '张三',
+  age: 28,
+  gender: '男',
+  phone: '13800138000',
+  highest_degree: '本科',
+  school: '某某大学',
+  major: '计算机科学与技术',
+  graduationTime: '2018年',
+  work_experience: [
+    '某某科技有限公司',
+    '某某网络公司',
+  ],
+  skills: ['Vue3', 'TypeScript', 'Element Plus', 'React', 'Node.js', 'Webpack'],
+  project_experience: [
+      '企业级后台管理系统',
+      'xx项目技术负责人',
+  ],
+  selfEvaluation: '5年前端开发经验，熟练掌握Vue技术栈，对前端工程化和性能优化有深入理解。具有良好的编码习惯和团队协作能力。'
+})
 const pagination: Pagination = reactive({
   current_page: 1,
   size: 10,
   total: 0,
   total_pages: 0
 })
-// 路由组件，用于跳转到简历视图
-const router = useRouter()
+// 简历详情页面显示开关
+const visible = ref(false)
+
 const loadResumes = async () => {
   try {
     //console.log(pagination)
@@ -87,13 +110,12 @@ const loadResumes = async () => {
     console.error('API Error:', error);
   }
 };
-const handlePreview = (rowData: any)=> {
+const handlePreview = (rowData: Resume)=> {
+  // Object.assign批量更新 reactive 或 ref 对象的属性，并保持响应性
+  // Object.assign 可以一次性将所有 rowData 的属性复制到currentResume，并保持响应性
+  Object.assign(currentResume, rowData)
+  visible.value = true
   console.log((rowData))
-
-  router.push({
-    path: '/resume_viewer',
-    state: { rowData }
-  })
 }
 
 // 在组件挂载时自动调用

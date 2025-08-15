@@ -36,11 +36,14 @@ export interface ApiResponse<T = any> {
 export interface Resume {
   _id: string;
   name?: string;
+  age?:number;
   phone?: string;
   email?: string;
   birthday?: string;
+  school?: string;
   highest_degree?: string;
   major?: string;
+  graduationTime?: string;
   is_resume?: boolean;
   file_name?: string;
   ethnicity?: string;
@@ -52,7 +55,8 @@ export interface Resume {
   work_experience?: string[] | null;
   skills?: string[];
   project_experience?: string[];
-  awards?: string[];
+  award?: string[];
+  selfEvaluation?: string;
 }
 
 // 翻页参数对象

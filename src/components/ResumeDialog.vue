@@ -16,24 +16,18 @@
 
       <!-- 折叠面板区域 -->
       <el-collapse v-model="activeCollapse" class="resume-collapse" accordion>
-        <el-collapse-item title="教育背景" name="education">
+        <el-collapse-item title="教育背景" name="education_background">
           <div class="collapse-content">
-            <h4>{{ resume.education }}</h4>
-            <p v-if="resume.school">毕业院校: {{ resume.school }}</p>
-            <p v-if="resume.major">专业: {{ resume.major }}</p>
-            <p v-if="resume.graduationTime">毕业时间: {{ resume.graduationTime }}</p>
+            <div v-for="(exp, index) in resume.education_background" :key="index" class="education-item">
+              <h4>{{ exp }} </h4>
+            </div>
           </div>
         </el-collapse-item>
 
         <el-collapse-item title="工作经历" name="experience">
           <div class="collapse-content">
-            <div v-for="(exp, index) in resume.experiences" :key="index" class="experience-item">
-              <h4>{{ exp.company }} ({{ exp.duration }})</h4>
-              <p><strong>职位:</strong> {{ exp.position }}</p>
-              <p><strong>工作内容:</strong></p>
-              <ul>
-                <li v-for="(desc, i) in exp.descriptions" :key="i">{{ desc }}</li>
-              </ul>
+            <div v-for="(exp, index) in resume.work_experience" :key="index" class="experience-item">
+              <h4>{{ exp }} </h4>
             </div>
           </div>
         </el-collapse-item>
@@ -54,21 +48,17 @@
 
         <el-collapse-item title="项目经验" name="projects">
           <div class="collapse-content">
-            <div v-for="(project, index) in resume.projects" :key="index" class="project-item">
-              <h4>{{ project.name }} ({{ project.period }})</h4>
-              <p><strong>技术栈:</strong> {{ project.techStack.join(', ') }}</p>
-              <p><strong>项目描述:</strong> {{ project.description }}</p>
-              <p><strong>职责:</strong></p>
-              <ul>
-                <li v-for="(resp, i) in project.responsibilities" :key="i">{{ resp }}</li>
-              </ul>
+            <div v-for="(project, index) in resume.project_experience" :key="index" class="project-item">
+              <h4>{{ project }} </h4>
             </div>
           </div>
         </el-collapse-item>
 
-        <el-collapse-item title="自我评价" name="evaluation">
+        <el-collapse-item title="所获奖项" name="awards">
           <div class="collapse-content">
-            <p>{{ resume.selfEvaluation }}</p>
+            <div v-for="(award, index) in resume.award" :key="index" class="project-item">
+              <h4>{{ award }} </h4>
+            </div>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -83,6 +73,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import type { Resume } from '@/types';
 
 interface Experience {
   company: string
@@ -99,7 +90,7 @@ interface Project {
   responsibilities: string[]
 }
 
-interface Resume {
+/* interface Resume {
   id: number
   name: string
   age: number
@@ -113,7 +104,7 @@ interface Resume {
   skills: string[]
   projects: Project[]
   selfEvaluation: string
-}
+} */
 
 const props = defineProps<{
   modelValue: boolean
