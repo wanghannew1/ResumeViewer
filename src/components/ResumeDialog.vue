@@ -9,16 +9,37 @@
       <!-- 基本信息展示 -->
       <el-descriptions border :column="2" size="small">
         <el-descriptions-item label="姓名">{{ resume.name }}</el-descriptions-item>
+        <el-descriptions-item label="生日">{{ resume.birthday }}</el-descriptions-item>
         <el-descriptions-item label="年龄">{{ resume.age }}</el-descriptions-item>
         <el-descriptions-item label="性别">{{ resume.gender }}</el-descriptions-item>
-        <el-descriptions-item label="联系方式">{{ resume.phone }}</el-descriptions-item>
+        <el-descriptions-item label="民族">{{ resume.ethnicity }}</el-descriptions-item>
+        <el-descriptions-item label="政治面貌">{{ resume.political_affiliation }}</el-descriptions-item>
+        <el-descriptions-item label="联系方式">{{ (resume.phone || "") +" / "+ (resume.email || "") }}</el-descriptions-item>
+        <el-descriptions-item label="户口地/居住地">{{ (resume.native_place || "") +" / "+ (resume.address || "") }}</el-descriptions-item>
+        <el-descriptions-item label="学历">{{ resume.highest_degree }}</el-descriptions-item>
+        <el-descriptions-item label="专业">{{ resume.highest_major }}</el-descriptions-item>
       </el-descriptions>
 
-      <!-- 折叠面板区域 -->
-      <el-collapse v-model="activeCollapse" class="resume-collapse" accordion>
+      <!-- 折叠面板区域 accordion -->
+      <el-collapse v-model="activeCollapse" class="resume-collapse">
         <el-collapse-item title="教育背景" name="education_background">
           <div class="collapse-content">
             <div v-for="(exp, index) in resume.education_background" :key="index" class="education-item">
+              <!-- <h4>{{ exp }} </h4> -->
+              <div class="education-header">
+                <h4 class="institution">{{ exp.institution }}</h4>
+                <span class="degree-major">{{ exp.degree }} · {{ exp.major }}</span>
+              </div>
+              <div v-if="exp.time_range" class="education-time">
+                {{ exp.time_range.start_date }} 至 {{ exp.time_range.end_date }}
+              </div>
+            </div>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="校园经历" name="campus_activities">
+          <div class="collapse-content">
+            <div v-for="(exp, index) in resume.campus_activities" :key="index" class="education-item">
               <h4>{{ exp }} </h4>
             </div>
           </div>
@@ -35,7 +56,7 @@
         <el-collapse-item title="技能专长" name="skills">
           <div class="collapse-content">
             <el-tag
-              v-for="(skill, index) in resume.skills"
+              v-for="(skill, index) in resume.skills_certification"
               :key="index"
               type="success"
               effect="dark"
@@ -61,6 +82,15 @@
             </div>
           </div>
         </el-collapse-item>
+
+        <el-collapse-item title="其他" name="other">
+          <div class="collapse-content">
+            <div v-for="(other, index) in resume.other" :key="index" class="project-item">
+              <h4>{{ other }} </h4>
+            </div>
+          </div>
+        </el-collapse-item>
+
       </el-collapse>
     </div>
 
@@ -124,61 +154,50 @@ watch(visible, (val) => {
   emit('update:modelValue', val)
 })
 
+watch(() => props.resume, (newResume) => {
+  const newActiveCollapse = [];
+  
+  if (newResume && newResume.education_background && newResume.education_background.length > 0) {
+      newActiveCollapse.push("education_background");
+  }
+
+  if (newResume && newResume.campus_activities && newResume.campus_activities.length > 0) {
+      newActiveCollapse.push("campus_activities");
+  }
+  
+  if (newResume && newResume.work_experience && newResume.work_experience.length > 0) {
+      newActiveCollapse.push("experience");
+  }
+  
+  if (newResume && newResume.skills_certification && newResume.skills_certification.length > 0) {
+      newActiveCollapse.push("skills");
+  }
+  
+  if (newResume && newResume.project_experience && newResume.project_experience.length > 0) {
+      newActiveCollapse.push("projects");
+  }
+  
+  if (newResume && newResume.award && newResume.award.length > 0) {
+      newActiveCollapse.push("awards");
+  }
+
+  if (newResume && newResume.other && newResume.other.length > 0) {
+      newActiveCollapse.push("other");
+  }
+  
+  // 默认展开第一项有内容的
+  if (newActiveCollapse.length > 0) {
+      activeCollapse.value = [...newActiveCollapse];
+  } else {
+      activeCollapse.value = [];
+  }
+}, { deep: true, immediate: true });
+
 const handleContact = () => {
   if (props.resume?.phone) {
     alert(`将联系 ${props.resume.name}，电话: ${props.resume.phone}`)
   }
 }
-
-/* // 在父组件中使用的数据示例
-const sampleResume: Resume = {
-  id: 1,
-  name: '张三',
-  age: 28,
-  gender: '男',
-  phone: '13800138000',
-  education: '本科',
-  school: '某某大学',
-  major: '计算机科学与技术',
-  graduationTime: '2018年',
-  experiences: [
-    {
-      company: '某某科技有限公司',
-      position: '前端开发工程师',
-      duration: '2019.06-至今',
-      descriptions: [
-        '负责公司核心产品的前端架构设计和开发',
-        '使用Vue3+TypeScript重构旧项目',
-        '优化前端性能，首屏加载时间减少40%'
-      ]
-    },
-    {
-      company: '某某网络公司',
-      position: '前端开发实习生',
-      duration: '2018.07-2019.05',
-      descriptions: [
-        '参与公司官网和后台管理系统开发',
-        '学习并应用Vue.js技术栈'
-      ]
-    }
-  ],
-  skills: ['Vue3', 'TypeScript', 'Element Plus', 'React', 'Node.js', 'Webpack'],
-  projects: [
-    {
-      name: '企业级后台管理系统',
-      period: '2022.03-2022.08',
-      techStack: ['Vue3', 'TypeScript', 'Element Plus', 'Pinia'],
-      description: '为公司内部使用的综合管理平台，包含用户管理、权限控制、数据统计等功能模块',
-      responsibilities: [
-        '负责前端架构设计和核心模块开发',
-        '实现动态路由和权限控制',
-        '优化表格大数据量渲染性能'
-      ]
-    }
-  ],
-  selfEvaluation: '5年前端开发经验，熟练掌握Vue技术栈，对前端工程化和性能优化有深入理解。具有良好的编码习惯和团队协作能力。'
-} */
-
 
 </script>
 
@@ -222,4 +241,38 @@ ul {
   padding-left: 20px;
   margin: 8px 0;
 }
+
+.education-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-left: 3px solid #3a86ff;
+  background-color: #f8f9fa;
+  border-radius: 0 4px 4px 0;
+
+  .education-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+
+    .institution {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #212529;
+    }
+
+    .degree-major {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+  }
+
+  .education-time {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-style: italic;
+  }
+}
+
+
 </style>

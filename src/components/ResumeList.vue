@@ -15,7 +15,7 @@
       <el-table-column prop="email" label="邮箱" width="240" />
       <el-table-column prop="birthday" label="生日" width="120" />
       <el-table-column prop="highest_degree" label="学历" width="100" />
-      <el-table-column prop="major" label="专业" width="200" />
+      <el-table-column prop="highest_major" label="专业" width="200" />
 
       <!-- 操作列 -->
       <el-table-column label="操作" width="300" fixed="right">
@@ -28,13 +28,14 @@
           >
             查看详情
           </el-button>
-          <el-button 
+          <!-- <el-button 
             type="primary"
             size="small"
-            
+            @click="handleDownload(row.file_name)"
           >
             下载简历
-          </el-button>
+          </el-button> -->
+          <a :href="'http://10.2.211.17/resumes/'+row.file_name" :download="row.file_name">下载简历</a>
         </template>
       </el-table-column>
     </el-table>
@@ -68,25 +69,19 @@ import type { Pagination, Resume } from '@/types'
 
 const resumeList: any[] = reactive([]) // 必须设置数组的类型，否则resumeList被 TypeScript 推断为 never[] 类型（表示"不允许任何元素"的数组）
 const currentResume: Resume = reactive({
-  _id: "1",
-  name: '张三',
-  age: 28,
-  gender: '男',
-  phone: '13800138000',
-  highest_degree: '本科',
-  school: '某某大学',
-  major: '计算机科学与技术',
-  graduationTime: '2018年',
-  work_experience: [
-    '某某科技有限公司',
-    '某某网络公司',
-  ],
-  skills: ['Vue3', 'TypeScript', 'Element Plus', 'React', 'Node.js', 'Webpack'],
-  project_experience: [
-      '企业级后台管理系统',
-      'xx项目技术负责人',
-  ],
-  selfEvaluation: '5年前端开发经验，熟练掌握Vue技术栈，对前端工程化和性能优化有深入理解。具有良好的编码习惯和团队协作能力。'
+  _id: "",
+  // name: '',
+  // age: 0,
+  // gender: '',
+  // phone: '',
+  // highest_degree: '',
+  // school: '',
+  // highest_major: '',
+  // graduationTime: '',
+  // work_experience: [],
+  // skills_certification: [],
+  // project_experience: [],
+  // selfEvaluation: ''
 })
 const pagination: Pagination = reactive({
   current_page: 1,
@@ -111,6 +106,14 @@ const loadResumes = async () => {
   }
 };
 const handlePreview = (rowData: Resume)=> {
+  // Object.assign批量更新 reactive 或 ref 对象的属性，并保持响应性
+  // Object.assign 可以一次性将所有 rowData 的属性复制到currentResume，并保持响应性
+  Object.assign(currentResume, rowData)
+  visible.value = true
+  console.log((rowData))
+}
+
+const handleDownload = (rowData: Resume)=> {
   // Object.assign批量更新 reactive 或 ref 对象的属性，并保持响应性
   // Object.assign 可以一次性将所有 rowData 的属性复制到currentResume，并保持响应性
   Object.assign(currentResume, rowData)

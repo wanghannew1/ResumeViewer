@@ -32,6 +32,21 @@ export interface ApiResponse<T = any> {
   data: T;
 }
 
+// 时间区间子类型
+export interface TimeRange {
+  start_date?: string;
+  end_date?: string;
+}
+
+// 教育背景子类型
+export interface EducationBackground {
+  institution?: string;
+  degree?: string;
+  major?: string;
+  time_range?: TimeRange;
+
+}
+
 // 简历类型
 export interface Resume {
   _id: string;
@@ -42,20 +57,24 @@ export interface Resume {
   birthday?: string;
   school?: string;
   highest_degree?: string;
-  major?: string;
+  highest_major?: string;
   graduationTime?: string;
   is_resume?: boolean;
   file_name?: string;
   ethnicity?: string;
+  political_affiliation?: string;
   seq_num?: number;
-  address?: string | null;
+  native_place?: string; // 户口地
+  address?: string;
   gender?: string | null;
   // 其他可能为null的字段...
-  education_background?: string[];
+  education_background?: EducationBackground[];
+  campus_activities?: string[];
   work_experience?: string[] | null;
-  skills?: string[];
+  skills_certification?: string[];
   project_experience?: string[];
   award?: string[];
+  other?: string[];
   selfEvaluation?: string;
 }
 
