@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import type { ApiError, ApiResponse} from '@/types'
+import type { ApiError, ApiResponse, Pagination} from '@/types'
 
 // 1. 定义 API 返回数据的通用结构（根据你的后端调整）
 /* interface ApiResponse<T = any> {
@@ -90,10 +90,11 @@ export const fetchData = async (getUrl: string): Promise<any> => {
   });
 };
 
-export const postData = async (payload: { title: string }): Promise<{ id: number }> => {
+// Promise<T>泛型代表当执行 await postData()时，返回值的类型为T，即接口返回的数据类型。因为在5. 响应拦截器中统一进行过一层解包，所以不含{code：number}。
+export const postData = async (payload: { query: string }): Promise<{ vectors: any; pagination: Pagination }> => {
   return request({
     method: 'POST',
-    url: '/create',
+    url: '/search_by_json',
     data: payload,
   });
 };

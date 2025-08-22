@@ -4,13 +4,14 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
+    <!-- <HelloWorld msg="You did it!" /> -->
     <header>
     <div class="wrapper">
-      <!-- <HelloWorld msg="You did it!" /> -->
+      
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/search">search</RouterLink>
       </nav>
     </div>
   </header>
@@ -30,7 +31,8 @@ header {
 }
 
 nav {
-  width: 100%;
+  width: 60%;
+  max-width: 100px;
   font-size: 12px;
   text-align: center;
   margin-top: 2rem;

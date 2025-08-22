@@ -1,5 +1,13 @@
 <template>
   <div class="resume-container">
+    <el-input
+      v-model="textarea"
+      style="width: 240px"
+      :rows="2"
+      type="textarea"
+      placeholder="请输入岗位要求"
+    />
+    <el-button type="primary" @click="search()">查询</el-button>
     <el-table 
       :data="resumeList" 
       border 
@@ -46,8 +54,6 @@
       v-model:page-size="pagination.size"
       :page-sizes="[100, 200, 500, 1000]"
       :total="pagination.total"
-      @size-change="loadResumes"
-      @current-change="loadResumes"
       layout="sizes, total, prev, pager, next"
     />
   </div>
@@ -86,26 +92,32 @@ const currentResume: Resume = reactive({
 })
 const pagination: Pagination = reactive({
   current_page: 1,
-  size: 10,
+  size: 20,
   total: 0,
   total_pages: 0
 })
 // 简历详情页面显示开关
 const visible = ref(false)
+// 搜索框内容
+const textarea = ref('')
 
-const loadResumes = async () => {
+const search = async () => {
   try {
-    //console.log(pagination)
-    const resdata = await fetchData(`/resume_list/${pagination.current_page}/${pagination.size}`);
-    //console.log('Loaded data:', resdata);
-    //console.log(typeof(resdata))
-    resumeList.splice(0, resumeList.length, ...resdata.resumes);// 返回值结构{resumes:[], pagination:{...}}
-    //console.log(resumeList)
+    const resdata = await postData({ query: textarea.value });
+    // console.log('Loaded data:', resdata);
+    // console.log(typeof(resdata))
+    const allResumes = resdata.vectors?.[0]?.flatMap( (item: any) => 
+      item?.entity?.resume_json || []
+    ) || [];
+
+    resumeList.splice(0, resumeList.length, ...allResumes);
+    console.log(resumeList)
     Object.assign(pagination, resdata.pagination);
   } catch (error) {
     console.error('API Error:', error);
   }
-};
+}
+
 const handlePreview = (rowData: Resume)=> {
   // Object.assign批量更新 reactive 或 ref 对象的属性，并保持响应性
   // Object.assign 可以一次性将所有 rowData 的属性复制到currentResume，并保持响应性
@@ -122,10 +134,6 @@ const handleDownload = (rowData: Resume)=> {
   console.log((rowData))
 }
 
-// 在组件挂载时自动调用
-onMounted(() => {
-  loadResumes(); // ✅ 主动调用
-});
 
 </script>
 

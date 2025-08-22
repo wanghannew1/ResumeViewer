@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ChildComp: typeof import('./src/components/ChildComp.vue')['default']
+    copy: typeof import('./src/components/ResumeList copy.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']
@@ -16,6 +17,7 @@ declare module 'vue' {
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElInput: typeof import('element-plus/es')['ElInput']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
@@ -34,6 +36,7 @@ declare module 'vue' {
     Resume: typeof import('./src/components/Resume.vue')['default']
     ResumeDialog: typeof import('./src/components/ResumeDialog.vue')['default']
     ResumeList: typeof import('./src/components/ResumeList.vue')['default']
+    ResumeSearch: typeof import('./src/components/ResumeSearch.vue')['default']
     ResumeViewer: typeof import('./src/components/deprecated/ResumeViewer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
